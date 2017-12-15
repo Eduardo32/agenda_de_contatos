@@ -22,25 +22,25 @@ import model.Contato;
 
 public class ContatoTableModel extends AbstractTableModel {
 
-	//Lista de contatos a serem exibidos no tabela
+    //Lista de contatos a serem exibidos no tabela
     private List<Contato> linhas;
-	//Array com os nomes das colunas
+    //Array com os nomes das colunas
     private final String[] colunas = new String[] {"Nome", "Email", "Endereço"};
-	//Constantes representando os indices das colunas
+    //Constantes representando os indices das colunas
     private static final int NOME = 0;
     private static final int EMAIL = 1;
     private static final int ENDERECO = 2;
 
-	//Contrutor para criar TableModel sem linhas
+    //Contrutor para criar TableModel sem linhas
     public ContatoTableModel() {
         linhas = new ArrayList<>();
     }
-    
-	//Contrutor para criar TableModel contendo uma lista recebida por parametro
+
+    //Contrutor para criar TableModel contendo uma lista recebida por parametro
     public ContatoTableModel(List<Contato> listaDeContatos) {
         linhas = new ArrayList<>(listaDeContatos);
     }
-    
+
     @Override
     public int getRowCount() {
         return linhas.size();
@@ -50,7 +50,7 @@ public class ContatoTableModel extends AbstractTableModel {
     public int getColumnCount() {
         return colunas.length;
     }
-    
+
     @Override
     public String getColumnName(int columnIndex) {
         return colunas[columnIndex];
@@ -69,16 +69,17 @@ public class ContatoTableModel extends AbstractTableModel {
                 throw new IndexOutOfBoundsException("columnIndex out of bounds");
         }
     }
-    
+
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return false;
     }
-    
+
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
+        //Pega o contato referente a linha especificada
         Contato contato = linhas.get(rowIndex);
-        
+
         switch (columnIndex) {
             case NOME:
                 return contato.getNome();
@@ -90,11 +91,12 @@ public class ContatoTableModel extends AbstractTableModel {
                 throw new IndexOutOfBoundsException("columnIndex out of bounds");
         }
     }
-    
+
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        //Pega o contato referente a linha especificada
         Contato contato = linhas.get(rowIndex);
-        
+
         switch (columnIndex) {
             case NOME:
                 contato.setNome((String) aValue);
@@ -106,30 +108,54 @@ public class ContatoTableModel extends AbstractTableModel {
                 throw new IndexOutOfBoundsException("columnIndex out of bounds");
         }
     }
-    
+
+    //Retorna o contato referente a linha especificada
     public Contato getContato(int indiceLinha) {
         return linhas.get(indiceLinha);
     }
-    
+
+    //Adiciona o contato especificado ao modelo
     public void addContato(Contato contato) {
+        //Adiciona o registro
         linhas.add(contato);
+
+        //Pega a quantidade de registros e subtrai 1 para
+        //achar o ultimo indice. A subtração e necessária
+        //porque os indices começam em
         int ultimoIndice = getRowCount() - 1;
+
+        //Notifica a mudança
         fireTableRowsInserted(ultimoIndice, ultimoIndice);
     }
-    
+
+    //Remove o contato especificado ao modelo
     public void removeContato(int indiceLinha) {
+        //Adiciona o registro
         linhas.remove(indiceLinha);
+
+        //Notifica a mudança
         fireTableRowsDeleted(indiceLinha, indiceLinha);
     }
-    
+
+    //Adiciona uma lista de contatos no final da lista
     public void addListaDeContatos(List<Contato> contatos) {
+        //Pega o tamanho antigo da tabela, que servirá
+        //como indice para o primeiro dos novos registros
         int indice = getRowCount();
+
+        //Adiciona o registro
         linhas.addAll(contatos);
+
+        //Notifica a mudança
         fireTableRowsInserted(indice, indice + contatos.size());
     }
-    
+
+    //Remove todos os registros
     public void limpar() {
+        //Remove todos os registros
         linhas.clear();
+
+        //Notifica a mudança
         fireTableDataChanged();
     }
 }
