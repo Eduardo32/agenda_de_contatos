@@ -146,7 +146,7 @@ public class FrameContatos extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
-        FrameAdicionarContato frame = new FrameAdicionarContato(this, rootPaneCheckingEnabled);
+        FrameAlterarContato frame = new FrameAlterarContato(this, rootPaneCheckingEnabled);
         frame.setVisible(rootPaneCheckingEnabled);
     }//GEN-LAST:event_btnAddActionPerformed
 
@@ -154,21 +154,22 @@ public class FrameContatos extends javax.swing.JFrame {
         // TODO add your handling code here:
         model = (ContatoTableModel) tblContatos.getModel();
         if(tblContatos.getSelectedRow() == -1) {
-            JOptionPane.showMessageDialog(null, "Por favor selecione um contato para ser alterado", "Excluir", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Por favor selecione um contato para ser alterado", 
+                    "Excluir", JOptionPane.INFORMATION_MESSAGE);
         } else {
             contato = model.getContato(tblContatos.getSelectedRow());
 
             FrameAlterarContato frame = new FrameAlterarContato(this, rootPaneCheckingEnabled, contato);
             frame.setVisible(rootPaneCheckingEnabled);
         }
-        //JOptionPane.showMessageDialog(rootPane, "Função não implementada", "Erro", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         // TODO add your handling code here:
         model = (ContatoTableModel) tblContatos.getModel();
         if(tblContatos.getSelectedRow() == -1) {
-            JOptionPane.showMessageDialog(null, "Por favor selecione um contato para ser excluido", "Excluir", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Por favor selecione um contato para ser excluido", 
+                    "Excluir", JOptionPane.INFORMATION_MESSAGE);
         } else {
             contato = model.getContato(tblContatos.getSelectedRow());
 
@@ -178,7 +179,6 @@ public class FrameContatos extends javax.swing.JFrame {
                 model.removeContato(tblContatos.getSelectedRow());
             }
         }
-        //JOptionPane.showMessageDialog(null, "Função não implementada", "Erro", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     public static void updateTable() {

@@ -19,11 +19,16 @@ public class FrameAlterarContato extends javax.swing.JDialog {
      */
     public FrameAlterarContato(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        this.update = false;
+        this.title = "Novo Contato";
+        this.contato = new Contato();
         initComponents();
     }
     
     public FrameAlterarContato(java.awt.Frame parent, boolean modal, Contato contato) {
         super(parent, modal);
+        this.update = true;
+        this.title = "Alterar Contato";
         this.contato = contato;
         initComponents();
     }
@@ -50,7 +55,7 @@ public class FrameAlterarContato extends javax.swing.JDialog {
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Alterar Contato");
+        setTitle(title);
         setIconImage(null);
         setResizable(false);
 
@@ -169,22 +174,28 @@ public class FrameAlterarContato extends javax.swing.JDialog {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         // TODO add your handling code here:
-        novoContato = new Contato();
+        if(update) {
+            novoContato = new Contato();
         
-        novoContato.setNome(txtNome.getText());
-        novoContato.setEmail(txtEmail.getText());
-        novoContato.setEndereco(txtEndereco.getText());
-        
-        lblDica.setText("");
-        
-        if(novoContato.getNome().equals("")) {
-            lblDica.setText("Por favor informet o nome do novo contato");
-        } else if(novoContato.getEndereco().equals("")) {
-            lblDica.setText("Por favor informet o endereço do novo contato");
+            novoContato.setNome(txtNome.getText());
+            novoContato.setEmail(txtEmail.getText());
+            novoContato.setEndereco(txtEndereco.getText());
+
+            if(validarCampos(novoContato)) {
+                ContatoDAO.alterarContato(contato, novoContato);
+                FrameContatos.updateTable();
+                this.dispose();
+            }
         } else {
-            ContatoDAO.alterarContato(contato, novoContato);
-            FrameContatos.updateTable();
-            this.dispose();
+            contato.setNome(txtNome.getText());
+            contato.setEmail(txtEmail.getText());
+            contato.setEndereco(txtEndereco.getText());
+
+            if(validarCampos(contato)) {
+                ContatoDAO.salvarContato(contato);
+                FrameContatos.updateTable();
+                this.dispose();
+            }
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
@@ -244,7 +255,22 @@ public class FrameAlterarContato extends javax.swing.JDialog {
     private javax.swing.JTextField txtEndereco;
     private javax.swing.JTextField txtNome;
     // End of variables declaration//GEN-END:variables
+    private boolean update;
     private model.Contato contato;
     private model.Contato novoContato;
-    
+    private String title;
+
+    private boolean validarCampos(Contato contato) {
+        lblDica.setText("");
+            
+        if(contato.getNome().equals("")) {
+            lblDica.setText("Por favor informet o nome do novo contato");
+            return false;
+        } else if(contato.getEndereco().equals("")) {
+            lblDica.setText("Por favor informet o endereço do novo contato");
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
